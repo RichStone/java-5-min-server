@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Die Magic Page</title>
+</head>
+<body>
+  <h1>Gib eine Zahl ein und lass dich verzaubern.</h1>
+  <form action = "/number" method = "post">
+    <input type="number" name="number">
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
