@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Die Magic Page</title>
+</head>
+<body>
+  
+  #if ($number)
+	  <h2> Can you guess which operation it is? </h2>
+	  <p> value = $number </p>
+	  <p> result = $mul </p>
+  #else
+	  <h1>Gib eine Zahl ein und lass dich verzaubern.</h1>
+	  <form action = "/number" method = "post">
+	    <input type="number" name="number">
+	    <input type="submit" value="Submit">
+	  </form>
+  #end
+  
+</body>
+</html>
