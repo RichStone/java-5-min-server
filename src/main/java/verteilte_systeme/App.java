@@ -1,4 +1,4 @@
-package de.htw.app;
+package verteilte_systeme;
 
 /**
  * Hello world!
