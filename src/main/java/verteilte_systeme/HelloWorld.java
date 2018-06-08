@@ -1,4 +1,4 @@
-package de.htw.app;
+package verteilte_systeme;
 
 import static spark.Spark.*;
 
@@ -27,16 +27,37 @@ public class HelloWorld {
         });
         get("/number", (request, response) -> {
         	Map<String, Object> m = new HashMap<String, Object>();
-        	return render(m, "fibonacci.vm");
+        	return render(m, "number_input.vm");
         });
+        
         post("/number", (request, response) -> {
         	Map<String, Object> m = new HashMap<String, Object>();
-        	String number = request.attribute("number");
-        	System.out.println(request.params());
-        	System.out.println(request.attributes());
-        	System.out.println(request.queryParams("number"));
-        	System.out.println(request.splat());
-        	return render(m, "fibonacci.vm");
+        	int number = Integer.parseInt(request.queryParams("number"));
+        	m.put("number", number);
+        	m.put("mul", number*number);
+
+        	return render(m,"number_input.vm");
+        });
+        
+        get("/params_calc", (request, response) -> {
+        	Map<String, Object> m = new HashMap<String, Object>();
+        	if (isInteger(request.queryParams("number_01")) && isInteger(request.queryParams("number_02"))) {
+        		int first_number = Integer.parseInt(request.queryParams("number_01"));
+        		int second_number = Integer.parseInt(request.queryParams("number_02"));
+        		
+        		int add = first_number + second_number;
+            	int sub = first_number - second_number;
+            	int mul = first_number * second_number;
+            	int div = first_number / second_number;
+            	
+            	m.put("01", first_number);
+            	m.put("02", second_number);
+            	
+            	return "(Addition): " + add + "\n"
+        		+ "(Substraction): " + sub;
+        	}
+            else return "You entered a string instead of a number as an URL parameter. Please enter values for number_01 and number_02." + "<br>"
+            		+ "example URL could be /params_calc?number_01=20&number_02=12";
         });
     }
     
@@ -44,4 +65,17 @@ public class HelloWorld {
         return new VelocityTemplateEngine().render(new ModelAndView(model, templatePath));
     }
     
+    public static boolean isInteger(String s) {
+        boolean isValidInteger = false;
+        try
+        {
+           Integer.parseInt(s);   
+           isValidInteger = true;
+        }
+        catch (NumberFormatException ex)
+        {
+           // s is not an integer
+        }
+        return isValidInteger;
+     }
 }
