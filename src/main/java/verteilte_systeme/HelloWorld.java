@@ -66,16 +66,17 @@ public class HelloWorld {
             else return "You entered a string instead of a number as an URL parameter. Please enter values for number_01 and number_02." + "<br>"
             		+ "example URL could be /params_calc?number_01=20&number_02=12";
         });
+        
         // TODO: POST an Server V2 mit x=3 y="zwei drei daten" an Server senden, der an eine zweite Server Instanz weiterleitet
         // V3 haben wir schon, das ist die interne Funktion
-        // TODO: V2 soll aus zwei drei Daten ein Java Object bauen und an V4 senden
+        // TODO: binary task, V2 soll aus zwei drei Daten ein Java Object bauen und an V4 senden
 	}
 	
     private static void igniteSecondSparkV2() {
     	Service http = Service.ignite()
                 .port(8080)
                 .threadPool(20);
-
+    	
     	http.get("/", (q, a) -> "Hello from server V4 from port 8080!");
     	
 	}
@@ -97,4 +98,14 @@ public class HelloWorld {
         }
         return isValidInteger;
      }
+    
+    class Transformer {
+		double x;
+		double y;
+		
+		public Transformer(double x, double y) {
+			this.x = Math.pow(x, y);
+			this.y = Math.pow(y, x);
+		}
+	}
 }
