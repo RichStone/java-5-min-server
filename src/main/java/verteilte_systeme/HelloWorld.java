@@ -40,8 +40,11 @@ public class HelloWorld {
         	Map<String, Object> m = new HashMap<String, Object>();
         	
         	HttpResponse<String> stringResponse = Unirest.get("http://localhost:8080/get")
-      			  .asString();
+        			.queryString("num1", "1")
+        			.queryString("num2", "2")
+        			.asString();
         	System.out.println(stringResponse.getBody());
+        	System.out.println(stringResponse.getHeaders());
         	
         	return render(m, "number_input.vm");
         });
@@ -89,11 +92,16 @@ public class HelloWorld {
     	http.get("/", (q, a) -> "Hello from server V4 from port 8080!");
     	
     	http.get("/get", (request, response) -> {
-        	return "GETTO";
+    		System.out.println(request.queryString());
+    		String req = request.queryString();
+    		int num1 = Integer.parseInt(request.queryParams("num1"));
+    		int num2 = Integer.parseInt(request.queryParams("num2"));
+        	return "GET " + req + "\n num1 + num2: " + "\n" + (num1 + num2);
         });
     	
     	http.get("/object", (request, response) -> {
-        	return "GETTO";
+    		response.type("");
+        	return "OBJ";
         });
 	}
 
