@@ -5,6 +5,10 @@ import static spark.Spark.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+
 import spark.ModelAndView;
 import spark.Service;
 import spark.template.velocity.VelocityTemplateEngine;
@@ -34,6 +38,11 @@ public class HelloWorld {
         });
         get("/number", (request, response) -> {
         	Map<String, Object> m = new HashMap<String, Object>();
+        	
+        	HttpResponse<String> stringResponse = Unirest.get("http://localhost:8080/get")
+      			  .asString();
+        	System.out.println(stringResponse.getBody());
+        	
         	return render(m, "number_input.vm");
         });
         
@@ -79,6 +88,13 @@ public class HelloWorld {
     	
     	http.get("/", (q, a) -> "Hello from server V4 from port 8080!");
     	
+    	http.get("/get", (request, response) -> {
+        	return "GETTO";
+        });
+    	
+    	http.get("/object", (request, response) -> {
+        	return "GETTO";
+        });
 	}
 
 	public static String render(Map<String, Object> model, String templatePath) {
@@ -108,4 +124,6 @@ public class HelloWorld {
 			this.y = Math.pow(y, x);
 		}
 	}
+    
+    
 }
