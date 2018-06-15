@@ -6,13 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import spark.ModelAndView;
+import spark.Service;
 import spark.template.velocity.VelocityTemplateEngine;
 
 public class HelloWorld {
     public static void main(String[] args) {
+    	igniteFirstSparkV1();
+    	igniteSecondSparkV2();
+    }
+    
+	private static void igniteFirstSparkV1() {
+		Service http = Service.ignite();
+		
     	staticFiles.location("/public");
-    	
-        get("/", (request, response) -> "Hello World ÜÄÖ");
+
+    	// get("/", (request, response) -> "Hello World ÜÄÖß%&   FROM PORT 4567 ");
+    	get("/", (request, response) -> {        	
+        	return "<html><body><h1>Hello World ÜÄÖß$% from Server V2 from port 4567</h1><img src=imgs/sparkjava.png alt=\"Smiley face\"></body></html>";
+        });
         get("/hello-user/:name", (request, response) -> {
         	String name = request.params(":name");
         	return "hello-print " + name;
@@ -20,10 +31,6 @@ public class HelloWorld {
         post("/add/:user-name", (request, response) -> {
         	String name = request.params(":name");
         	return "hello-print " + name;
-        });
-        get("/picture", (request, response) -> {        	
-//        	response.type("text/html,charset=utf-8");
-        	return "<html><body><h1>Hello World ÜÄÖ</h1><img src=imgs/sparkjava.png alt=\"Smiley face\"></body></html>";
         });
         get("/number", (request, response) -> {
         	Map<String, Object> m = new HashMap<String, Object>();
@@ -59,12 +66,24 @@ public class HelloWorld {
             else return "You entered a string instead of a number as an URL parameter. Please enter values for number_01 and number_02." + "<br>"
             		+ "example URL could be /params_calc?number_01=20&number_02=12";
         });
-    }
-    
-    public static String render(Map<String, Object> model, String templatePath) {
+        // TODO: POST an Server V2 mit x=3 y="zwei drei daten" an Server senden, der an eine zweite Server Instanz weiterleitet
+        // V3 haben wir schon, das ist die interne Funktion
+        // TODO: V2 soll aus zwei drei Daten ein Java Object bauen und an V4 senden
+	}
+	
+    private static void igniteSecondSparkV2() {
+    	Service http = Service.ignite()
+                .port(8080)
+                .threadPool(20);
+
+    	http.get("/", (q, a) -> "Hello from server V4 from port 8080!");
+    	
+	}
+
+	public static String render(Map<String, Object> model, String templatePath) {
         return new VelocityTemplateEngine().render(new ModelAndView(model, templatePath));
     }
-    
+	
     public static boolean isInteger(String s) {
         boolean isValidInteger = false;
         try
